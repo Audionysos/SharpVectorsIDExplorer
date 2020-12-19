@@ -1,5 +1,3 @@
-﻿using SharpVectors.Converters;
-using SharpVectors.Renderers.Wpf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +8,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+
+using SharpVectors.Runtime;
+using SharpVectors.Converters;
+using SharpVectors.Renderers.Wpf;
 
 namespace MyDrawingDocumentTest {
 
@@ -69,6 +71,7 @@ namespace MyDrawingDocumentTest {
 			FileSvgReader fr = new FileSvgReader(false, false,
 				new DirectoryInfo(Environment.CurrentDirectory),
 				null);
+			fr.DrawingSettings.InteractiveMode = SvgInteractiveModes.Standard;  //PAUL: Updates!
 			var dg = fr.Read(svgFile);
 			constructFromDrawing(dg, fr.DrawingDocument);
 		}
@@ -381,7 +384,7 @@ namespace MyDrawingDocumentTest {
 				r,
 				o,
 			};
-			var cm = t.view.RenderTransform.Value;
+			var cm = tr.Value; //PAUL: Fixed Null Exception. var cm = t.view.RenderTransform.Value;
 
 			var tp = cm.Transform(new Point(0, 1));
 			r.angle = 180 / Math.PI * Math.Atan2(tp.X, tp.Y);
